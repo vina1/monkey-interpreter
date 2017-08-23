@@ -37,6 +37,14 @@ var keywords = map[string]TokenType{
 	"let": LET, 
 }
 
+func NewTokenFromChar(tokenType TokenType, char byte) Token { 
+	return Token{Type: tokenType, Literal: string(char)} 
+} 
+
+func NewToken(tokenType TokenType, str string) Token { 
+	return Token{Type: tokenType, Literal: str} 
+} 
+
 func LookupIdent(ident string) TokenType {
 	if tok, ok := keywords[ident]; ok { 
 		return tok 
