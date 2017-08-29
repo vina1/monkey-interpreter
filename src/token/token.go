@@ -22,8 +22,10 @@ const (
 	BANG = "!"
 	ASTERISK = "*"
 	SLASH = "/"
-	LESSTHAN = "<"
-	GREATERTHAN = ">"
+	LESS_THAN = "<"
+	GREATER_THAN = ">"
+	EQUAL = "=="
+	NOT_EQUAL = "!="
 	
 	// Delimiters
  	COMMA = "," 

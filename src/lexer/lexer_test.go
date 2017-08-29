@@ -27,8 +27,8 @@ func TestAdditionalOperators(t *testing.T) {
 		token.NewToken(token.BANG, "!"),
 	 	token.NewToken(token.ASTERISK, "*"),
 		token.NewToken(token.SLASH, "/"),
-		token.NewToken(token.LESSTHAN, "<"),
-		token.NewToken(token.GREATERTHAN, ">"),
+		token.NewToken(token.LESS_THAN, "<"),
+		token.NewToken(token.GREATER_THAN, ">"),
 		token.NewToken(token.EOF, ""),
 		}
 
@@ -62,7 +62,7 @@ func TestConditionalBranchAndBooleans(t *testing.T) {
 		token.NewToken(token.IF, "if"),
 		token.NewToken(token.LPAREN, "("),
 		token.NewToken(token.INT, "5"),
-		token.NewToken(token.LESSTHAN, "<"),
+		token.NewToken(token.LESS_THAN, "<"),
 		token.NewToken(token.INT, "10"),
 		token.NewToken(token.RPAREN, ")"),
 		token.NewToken(token.LBRACE, "{"),
@@ -76,6 +76,28 @@ func TestConditionalBranchAndBooleans(t *testing.T) {
   		token.NewToken(token.FALSE, "false"),
 	    token.NewToken(token.SEMICOLON, ";"),
 		token.NewToken(token.RBRACE, "}"),
+		token.NewToken(token.EOF, ""),
+		}
+
+	AssertExpectedVersusActual(t, input, tests)
+}
+
+func TestEqualOperator(t *testing.T) {
+	input := `==`
+
+	tests := []token.Token { 
+		token.NewToken(token.EQUAL, "=="),
+		token.NewToken(token.EOF, ""),
+		}
+
+	AssertExpectedVersusActual(t, input, tests)
+}
+
+func TestNotEqualOperator(t *testing.T) {
+	input := `!=`
+
+	tests := []token.Token { 
+		token.NewToken(token.NOT_EQUAL, "!="),
 		token.NewToken(token.EOF, ""),
 		}
 
