@@ -51,6 +51,37 @@ func TestDelimeters(t *testing.T) {
 	AssertExpectedVersusActual(t, input, tests)
 }
 
+func TestConditionalBranchAndBooleans(t *testing.T) {
+	input := `if (5 < 10) { 
+		return true; 
+	} else { 
+		return false; 
+	}`
+
+	tests := []token.Token { 
+		token.NewToken(token.IF, "if"),
+		token.NewToken(token.LPAREN, "("),
+		token.NewToken(token.INT, "5"),
+		token.NewToken(token.LESSTHAN, "<"),
+		token.NewToken(token.INT, "10"),
+		token.NewToken(token.RPAREN, ")"),
+		token.NewToken(token.LBRACE, "{"),
+		token.NewToken(token.RETURN, "return"),
+  		token.NewToken(token.TRUE, "true"),
+		token.NewToken(token.SEMICOLON, ";"),
+		token.NewToken(token.RBRACE, "}"),
+		token.NewToken(token.ELSE, "else"),
+		token.NewToken(token.LBRACE, "{"),
+		token.NewToken(token.RETURN, "return"),
+  		token.NewToken(token.FALSE, "false"),
+	    token.NewToken(token.SEMICOLON, ";"),
+		token.NewToken(token.RBRACE, "}"),
+		token.NewToken(token.EOF, ""),
+		}
+
+	AssertExpectedVersusActual(t, input, tests)
+}
+
 func TestComplex(t *testing.T) {
 	input := `let five = 5; let ten = 10;
 	let add = fn(x, y) { x + y; };

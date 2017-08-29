@@ -36,11 +36,23 @@ const (
 	// Keywords 
 	FUNCTION = "FUNCTION" 
 	LET = "LET"
+	IF = "IF"
+	ELSE = "ELSE"
+	RETURN = "RETURN"
+
+	// Booleans
+	TRUE = "TRUE"
+	FALSE = "FALSE"
 ) 
 
 var keywords = map[string]TokenType{ 
 	"fn": FUNCTION,
 	"let": LET, 
+	"if": IF,
+	"else": ELSE,
+	"return": RETURN,
+	"true": TRUE,
+	"false": FALSE,
 }
 
 func NewTokenFromChar(tokenType TokenType, char byte) Token { 
