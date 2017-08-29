@@ -5,37 +5,33 @@ import (
 	"token"
 )
 
-func TestNextToken(t *testing.T) { 
-	input := `=+(){},;`
+// go test ./lexer
 
-	tests := []struct { 
-		expectedType token.TokenType 
-		expectedLiteral string 
-		}{ 
-			{token.ASSIGN, "="},
-			{token.PLUS, "+"},
-			{token.LPAREN, "("},
-			{token.RPAREN, ")"},
-			{token.LBRACE, "{"},
-			{token.RBRACE, "}"},
-			{token.COMMA, ","},
-			{token.SEMICOLON, ";"},
-			{token.EOF, ""}, 
+func TestOperators(t *testing.T) {
+input := `=+`
+
+	tests := []token.Token { 
+		token.NewToken(token.ASSIGN, "="),
+		token.NewToken(token.PLUS, "+"),
 		}
 
-	l := New(input)
+	AssertExpectedVersusActual(t, input, tests)
+}
 
-	for i, tt := range tests {
-		tok := l.NextToken()
+func TestDelimeters(t *testing.T) {
+	input := `(){},;`
 
-		if tok.Type != tt.expectedType { 
-			t.Fatalf("tests[%d] - tokentype wrong. expected=%q, got=%q", i, tt.expectedType, tok.Type) 
+	tests := []token.Token { 
+		token.NewToken(token.LPAREN, "("),
+		token.NewToken(token.RPAREN, ")"),
+		token.NewToken(token.LBRACE, "{"),
+		token.NewToken(token.RBRACE, "}"),
+		token.NewToken(token.COMMA, ","),
+		token.NewToken(token.SEMICOLON, ";"),
+		token.NewToken(token.EOF, ""),
 		}
 
-		if tok.Literal != tt.expectedLiteral { 
-			t.Fatalf("tests[%d] - literal wrong. expected=%q, got=%q", i, tt.expectedLiteral, tok.Literal) 
-		}
-	}
+	AssertExpectedVersusActual(t, input, tests)
 }
 
 func TestComplex(t *testing.T) {
@@ -43,61 +39,61 @@ func TestComplex(t *testing.T) {
 	let add = fn(x, y) { x + y; };
 	let result = add(five, ten); `
 
-	tests := []struct { 
-		expectedType token.TokenType 
-		expectedLiteral string 
-	}{ 
-		{token.LET, "let"}, 
-		{token.IDENT, "five"}, 
-		{token.ASSIGN, "="}, 
-		{token.INT, "5"}, 
-		{token.SEMICOLON, ";"}, 
-		{token.LET, "let"}, 
-		{token.IDENT, "ten"}, 
-		{token.ASSIGN, "="}, 
-		{token.INT, "10"}, 
-		{token.SEMICOLON, ";"}, 
-		{token.LET, "let"}, 
-		{token.IDENT, "add"}, 
-		{token.ASSIGN, "="},
-		{token.FUNCTION, "fn"},
-		{token.LPAREN, "("},
-		{token.IDENT, "x"},
-		{token.COMMA, ","},
-		{token.IDENT, "y"},
-		{token.RPAREN, ")"},
-		{token.LBRACE, "{"},
-		{token.IDENT, "x"},
-		{token.PLUS, "+"},
-		{token.IDENT, "y"},
-		{token.SEMICOLON, ";"},
-		{token.RBRACE, "}"}, 
-		{token.SEMICOLON, ";"}, 
-		{token.LET, "let"}, 
-		{token.IDENT, "result"}, 
-		{token.ASSIGN, "="}, 
-		{token.IDENT, "add"}, 
-		{token.LPAREN, "("}, 
-		{token.IDENT, "five"}, 
-		{token.COMMA, ","}, 
-		{token.IDENT, "ten"},
-		{token.RPAREN, ")"},
-		{token.SEMICOLON, ";"},
-		{token.EOF, ""},
+	tests := []token.Token{
+		token.NewToken(token.LET, "let"), 
+		token.NewToken(token.IDENT, "five"), 
+		token.NewToken(token.ASSIGN, "="), 
+		token.NewToken(token.INT, "5"), 
+		token.NewToken(token.SEMICOLON, ";"), 
+		token.NewToken(token.LET, "let"), 
+		token.NewToken(token.IDENT, "ten"), 
+		token.NewToken(token.ASSIGN, "="), 
+		token.NewToken(token.INT, "10"), 
+		token.NewToken(token.SEMICOLON, ";"), 
+		token.NewToken(token.LET, "let"), 
+		token.NewToken(token.IDENT, "add"), 
+		token.NewToken(token.ASSIGN, "="),
+		token.NewToken(token.FUNCTION, "fn"),
+		token.NewToken(token.LPAREN, "("),
+		token.NewToken(token.IDENT, "x"),
+		token.NewToken(token.COMMA, ","),
+		token.NewToken(token.IDENT, "y"),
+		token.NewToken(token.RPAREN, ")"),
+		token.NewToken(token.LBRACE, "{"),
+		token.NewToken(token.IDENT, "x"),
+		token.NewToken(token.PLUS, "+"),
+		token.NewToken(token.IDENT, "y"),
+		token.NewToken(token.SEMICOLON, ";"),
+		token.NewToken(token.RBRACE, "}"), 
+		token.NewToken(token.SEMICOLON, ";"), 
+		token.NewToken(token.LET, "let"), 
+		token.NewToken(token.IDENT, "result"), 
+		token.NewToken(token.ASSIGN, "="), 
+		token.NewToken(token.IDENT, "add"), 
+		token.NewToken(token.LPAREN, "("), 
+		token.NewToken(token.IDENT, "five"), 
+		token.NewToken(token.COMMA, ","), 
+		token.NewToken(token.IDENT, "ten"),
+		token.NewToken(token.RPAREN, ")"),
+		token.NewToken(token.SEMICOLON, ";"),
+		token.NewToken(token.EOF, ""),
 	} 
 
+	AssertExpectedVersusActual(t, input, tests)
+}
+
+func AssertExpectedVersusActual(t *testing.T, input string, expectedTokens []token.Token) {
 	l := New(input)
 
-	for i, tt := range tests {
+	for i, expectedToken := range expectedTokens {
 		tok := l.NextToken()
 
-		if tok.Type != tt.expectedType { 
-			t.Fatalf("tests[%d] - tokentype wrong. expected=%q, got=%q", i, tt.expectedType, tok.Type) 
+		if tok.Type != expectedToken.Type {
+			t.Fatalf("tests[%d] - tokentype wrong. expected=%q, got=%q", i, expectedToken.Type, tok.Type) 
 		}
 
-		if tok.Literal != tt.expectedLiteral { 
-			t.Fatalf("tests[%d] - literal wrong. expected=%q, got=%q", i, tt.expectedLiteral, tok.Literal) 
+		if tok.Literal != expectedToken.Literal {
+			t.Fatalf("tests[%d] - literal wrong. expected=%q, got=%q", i, expectedToken.Literal, tok.Literal) 
 		}
 	}
 }
-
