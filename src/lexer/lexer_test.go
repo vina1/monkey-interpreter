@@ -8,11 +8,28 @@ import (
 // go test ./lexer
 
 func TestOperators(t *testing.T) {
-input := `=+`
+	input := `=+`
 
 	tests := []token.Token { 
 		token.NewToken(token.ASSIGN, "="),
 		token.NewToken(token.PLUS, "+"),
+		token.NewToken(token.EOF, ""),
+		}
+
+	AssertExpectedVersusActual(t, input, tests)
+}
+
+func TestAdditionalOperators(t *testing.T) {
+	input := `-!*/<>`
+
+	tests := []token.Token { 
+		token.NewToken(token.MINUS, "-"),
+		token.NewToken(token.BANG, "!"),
+	 	token.NewToken(token.ASTERISK, "*"),
+		token.NewToken(token.SLASH, "/"),
+		token.NewToken(token.LESSTHAN, "<"),
+		token.NewToken(token.GREATERTHAN, ">"),
+		token.NewToken(token.EOF, ""),
 		}
 
 	AssertExpectedVersusActual(t, input, tests)
